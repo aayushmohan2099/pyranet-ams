@@ -6,16 +6,54 @@
 <body>
     <h1>Head Member</h1>
     <p>Name: {{ member.user.username }}</p>
-    
+
     <h1>Connected Members</h1>
     {% if member.children.all %}
         <ul>
         {% for relationship in member.children.all %}
-            <li>Name: {{ relationship.child.user.username }}</li>
+            <li>
+                Name: {{ relationship.child.user.username }}
+                <br><a href="{% url 'member_detail' relationship.child.id %}">View Details</a>
+            </li>
         {% endfor %}
         </ul>
     {% else %}
         <p>No connected members found.</p>
     {% endif %}
+
+    <h2>Actions</h2>
+    <ul>
+        <li><a href="/admin/">Go to Admin Panel</a></li>
+        <li><a href="{% url 'create_user' %}">Add Another Member</a></li>
+    </ul>
+
+    <h2>View Another Member</h2>
+    <form method="get" action="{% url 'member_detail' 0 %}">
+        <label for="member_id">Enter Member ID:</label>
+        <input type="text" id="member_id" name="member_id" required>
+        
+        <label for="member_select">Select Member:</label>
+        <select id="member_select" name="member_select">
+            {% for member_option in members %}
+                <option value="{{ member_option.id }}">{{ member_option.user.username }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">View Member</button>
+    </form>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var memberId = document.getElementById('member_id').value;
+            var selectedMemberId = document.getElementById('member_select').value;
+            
+            if (memberId) {
+                window.location.href = "{% url 'member_detail' 0 %}".replace('/0/', '/' + memberId + '/');
+            } else if (selectedMemberId) {
+                window.location.href = "{% url 'member_detail' 0 %}".replace('/0/', '/' + selectedMemberId + '/');
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Created</title>
+</head>
+<body>
+    <h1>Welcome {{ username }}</h1>
+    <p>The user has been successfully created!</p>
+
+    <div>
+        <a href="{% url 'admin:index' %}">Continue</a>
+    </div>
+    <div>
+        <a href="{% url 'member_detail' member.id %}">View Member</a>
+    </div>
+    <div>
+        <a href="{% url 'create_user' %}">Add Another</a>
+    </div>
+</body>
+</html>

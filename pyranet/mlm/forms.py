@@ -14,7 +14,6 @@ class UserCreationForm(forms.ModelForm):
         user.set_password(self.cleaned_data['password'])
         if commit:
             user.save()
-            # Associate with Member model if sponsor selected
             sponsor = self.cleaned_data.get('sponsor')
             if sponsor:
                 Member.objects.create(user=user, sponsor=sponsor)
