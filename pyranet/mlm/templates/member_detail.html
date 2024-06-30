@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Member Detail</title>
+</head>
+<body>
+    <h1>Head Member</h1>
+    <p>Name: {{ member.user.username }}</p>
+    
+    <h1>Connected Members</h1>
+    {% if member.children.all %}
+        <ul>
+        {% for relationship in member.children.all %}
+            <li>Name: {{ relationship.child.user.username }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No connected members found.</p>
+    {% endif %}
+</body>
+</html>
