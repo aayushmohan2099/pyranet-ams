@@ -1,0 +1,30 @@
+<!-- member_children.html -->
+{% load static %}
+
+{% block content %}
+<div class="body genealogy-body genealogy-scroll">
+    <div class="genealogy-tree">
+        <ul>
+            <li>
+                <a href="{% url 'member_detail' child.id %}">
+                    <div class="member-view-box">
+                        <div class="member-image">
+                            <img src="{% static 'path/to/your/member/image.jpg' %}" alt="Member">
+                            <div class="member-details">
+                                <h3>{{ child.user.username }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% if child.children.exists %}
+                    <ul>
+                        {% for grandchild in child.children.all %}
+                            {% include 'member_children.html' with child=grandchild %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

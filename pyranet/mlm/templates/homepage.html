@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Homepage</title>
+</head>
+<body>
+    <h1>Welcome to PyraNet</h1>
+    <p>This is the homepage of PyraNet, a Multi-Level Marketing management system.</p>
+    <ul>
+        <li><a href="{% url 'admin:index' %}">Go to Admin Panel</a></li>
+        <li><a href="{% url 'create_user' %}">Add a New Member</a></li>
+    </ul>
+
+    <h2>Member List</h2>
+    <ul>
+        {% for member in members %}
+            <li><a href="{% url 'member_detail' member.id %}">{{ member.user.username }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <h2>Find a Member</h2>
+    <form action="{% url 'find_member' %}" method="get">
+        <label for="member_id">Member ID:</label>
+        <input type="text" id="member_id" name="member_id">
+        <input type="submit" value="Find">
+    </form>
+    <form action="{% url 'find_member' %}" method="get">
+        <label for="member_select">Select Member:</label>
+        <select id="member_select" name="member_id">
+            {% for member in members %}
+                <option value="{{ member.id }}">{{ member.user.username }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Find">
+    </form>
+</body>
+</html>

@@ -2,6 +2,128 @@
 <html>
 <head>
     <title>Member Detail</title>
+    <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"><style>/*----------------genealogy-scroll----------*/
+  
+          .genealogy-scroll::-webkit-scrollbar {
+              width: 5px;
+              height: 8px;
+          }
+          .genealogy-scroll::-webkit-scrollbar-track {
+              border-radius: 10px;
+              background-color: #e4e4e4;
+          }
+          .genealogy-scroll::-webkit-scrollbar-thumb {
+              background: #212121;
+              border-radius: 10px;
+              transition: 0.5s;
+          }
+          .genealogy-scroll::-webkit-scrollbar-thumb:hover {
+              background: #d5b14c;
+              transition: 0.5s;
+          }
+          
+          
+          /*----------------genealogy-tree----------*/
+          .genealogy-body{
+              white-space: nowrap;
+              overflow-y: hidden;
+              padding: 50px;
+              min-height: 500px;
+              padding-top: 10px;
+          }
+          .genealogy-tree ul {
+              padding-top: 20px; 
+              position: relative;
+              padding-left: 0px;
+              display: flex;
+          }
+          .genealogy-tree li {
+              float: left; text-align: center;
+              list-style-type: none;
+              position: relative;
+              padding: 20px 5px 0 5px;
+          }
+          .genealogy-tree li::before, .genealogy-tree li::after{
+              content: '';
+              position: absolute; 
+            top: 0; 
+            right: 50%;
+              border-top: 2px solid #ccc;
+              width: 50%; 
+            height: 18px;
+          }
+          .genealogy-tree li::after{
+              right: auto; left: 50%;
+              border-left: 2px solid #ccc;
+          }
+          .genealogy-tree li:only-child::after, .genealogy-tree li:only-child::before {
+              display: none;
+          }
+          .genealogy-tree li:only-child{ 
+              padding-top: 0;
+          }
+          .genealogy-tree li:first-child::before, .genealogy-tree li:last-child::after{
+              border: 0 none;
+          }
+          .genealogy-tree li:last-child::before{
+              border-right: 2px solid #ccc;
+              border-radius: 0 5px 0 0;
+              -webkit-border-radius: 0 5px 0 0;
+              -moz-border-radius: 0 5px 0 0;
+          }
+          .genealogy-tree li:first-child::after{
+              border-radius: 5px 0 0 0;
+              -webkit-border-radius: 5px 0 0 0;
+              -moz-border-radius: 5px 0 0 0;
+          }
+          .genealogy-tree ul ul::before{
+              content: '';
+              position: absolute; top: 0; left: 50%;
+              border-left: 2px solid #ccc;
+              width: 0; height: 20px;
+          }
+          .icon {
+              color: #007bff; /* Example color */
+              width: 32px; /* Adjusted width */
+              height: 32px; /* Adjusted height */
+          }
+          .genealogy-tree li a{
+              text-decoration: none;
+              color: #666;
+              font-family: arial, verdana, tahoma;
+              font-size: 11px;
+              display: inline-block;
+              border-radius: 5px;
+              -webkit-border-radius: 5px;
+              -moz-border-radius: 5px;
+          }
+          
+          .genealogy-tree li a:hover+ul li::after, 
+          .genealogy-tree li a:hover+ul li::before, 
+          .genealogy-tree li a:hover+ul::before, 
+          .genealogy-tree li a:hover+ul ul::before{
+              border-color:  #fbba00;
+          }
+          
+          /*--------------memeber-card-design----------*/
+          .member-view-box{
+              padding:0px 20px;
+              text-align: center;
+              border-radius: 4px;
+              position: relative;
+          }
+          .member-image{
+              width: 60px;
+              position: relative;
+          }
+          .member-image img{
+              width: 60px;
+              height: 60px;
+              border-radius: 6px;
+            background-color :#000;
+            z-index: 1;
+          }</style>  
 </head>
 <body>
     <h1>Head Member</h1>
@@ -23,37 +145,28 @@
 
     <h2>Actions</h2>
     <ul>
+        <li><a href="{% url 'homepage' %}">Go to Homepage</a></li>
         <li><a href="/admin/">Go to Admin Panel</a></li>
         <li><a href="{% url 'create_user' %}">Add Another Member</a></li>
     </ul>
 
     <h2>View Another Member</h2>
-    <form method="get" action="{% url 'member_detail' 0 %}">
-        <label for="member_id">Enter Member ID:</label>
-        <input type="text" id="member_id" name="member_id" required>
-        
+    <form action="{% url 'find_member' %}" method="get">
+        <label for="member_id">Member ID:</label>
+        <input type="text" id="member_id" name="member_id">
+        <input type="submit" value="Find">
+    </form>
+    <form action="{% url 'find_member' %}" method="get">
         <label for="member_select">Select Member:</label>
-        <select id="member_select" name="member_select">
-            {% for member_option in members %}
-                <option value="{{ member_option.id }}">{{ member_option.user.username }}</option>
+        <select id="member_select" name="member_id">
+            {% for member in members %}
+                <option value="{{ member.id }}">{{ member.user.username }}</option>
             {% endfor %}
         </select>
-
-        <button type="submit">View Member</button>
+        <input type="submit" value="Find">
     </form>
 
-    <script>
-        document.querySelector('form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            var memberId = document.getElementById('member_id').value;
-            var selectedMemberId = document.getElementById('member_select').value;
-            
-            if (memberId) {
-                window.location.href = "{% url 'member_detail' 0 %}".replace('/0/', '/' + memberId + '/');
-            } else if (selectedMemberId) {
-                window.location.href = "{% url 'member_detail' 0 %}".replace('/0/', '/' + selectedMemberId + '/');
-            }
-        });
-    </script>
+    <h2>User Network Graph</h2>
+    {% include 'member_network.html' %}
 </body>
 </html>

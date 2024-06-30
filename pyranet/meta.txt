@@ -1,0 +1,13 @@
+<script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var memberId = document.getElementById('member_id').value;
+            var selectedMemberId = document.getElementById('member_select').value;
+            
+            if (memberId) {
+                window.location.href = "{% url 'member_detail' 0 %}".replace('/0/', '/' + memberId + '/');
+            } else if (selectedMemberId) {
+                window.location.href = "{% url 'member_detail' 0 %}".replace('/0/', '/' + selectedMemberId + '/');
+            }
+        });
+    </script>

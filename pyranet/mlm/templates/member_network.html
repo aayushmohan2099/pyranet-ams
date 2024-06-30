@@ -1,0 +1,20 @@
+<div class="body genealogy-body genealogy-scroll">
+    <div class="genealogy-tree">
+        {% with network_tree as formatted_tree %}
+        <ul>
+            {{ formatted_tree|safe }}
+        </ul>
+        {% endwith %}
+    </div>
+</div>
+  <script src='https://code.jquery.com/jquery-3.4.1.min.js'></script><script>$(function () {
+    $('.genealogy-tree ul').hide();
+    $('.genealogy-tree>ul').show();
+    $('.genealogy-tree ul.active').show();
+    $('.genealogy-tree li').on('click', function (e) {
+        var children = $(this).find('> ul');
+        if (children.is(":visible")) children.hide('fast').removeClass('active');
+        else children.show('fast').addClass('active');
+        e.stopPropagation();
+    });
+});</script>
