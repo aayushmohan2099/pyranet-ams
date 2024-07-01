@@ -11,4 +11,6 @@ urlpatterns = [
     path('establish-relationship/', views.establish_relationship, name='establish_relationship'),
     path('update-user/<str:username>/', views.update_user, name='update_user'),
     path('user-updated/<str:username>/', views.user_updated, name='user_updated'),
+    path('edit-relationship/<int:relationship_id>/', views.edit_member_relationship, name='edit_member_relationship'),
+    path('relationship-updated/<int:relationship_id>/', views.relationship_updated, name='relationship_updated'),
 ]

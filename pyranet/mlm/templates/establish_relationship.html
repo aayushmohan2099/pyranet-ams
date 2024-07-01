@@ -2,6 +2,16 @@
 <html>
 <head>
     <title>Establish Member Relationship</title>
+    <style>
+        table {
+            border-collapse: separate; /* Ensure separate borders */
+            border-spacing: 10px; /* Adjust the spacing between columns */
+        }
+        th, td {
+            padding: 10px; /* Optional: Add padding inside cells */
+            border: 1px solid black; /* Optional: Add borders to cells */
+        }
+    </style>
 </head>
 <body>
     <h1>Establish Member Relationship</h1>
@@ -16,6 +26,21 @@
         <li><a href="{% url 'homepage' %}">Go to Homepage</a></li>
         <li><a href="{% url 'create_user' %}">Add New Member</a></li>
     </ul>
+    <h3>Update Existing Relationships</h3>
+    <table>
+        <tr>
+            <th>Head</th>
+            <th>Subordinate</th>
+            <th>Operation</th>
+        </tr>
+        {% for relationship in relationships %}
+            <tr>
+                <td>{{ relationship.parent.user.username }}</td>
+                <td>{{ relationship.child.user.username }}</td>
+                <td><a href="{% url 'edit_member_relationship' relationship_id=relationship.id %}">Edit</a></td>
+            </tr>
+        {% endfor %}
+    </table>
 
     <h2>View Member Details</h2>
     <form action="{% url 'find_member' %}" method="get">

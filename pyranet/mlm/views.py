@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Member, MemberRelationship
-from .forms import UserCreationForm, MemberRelationshipForm, UpdateUserForm
+from .forms import UserCreationForm, MemberRelationshipForm, UpdateUserForm, EditMemberRelationshipForm
 import json
 from django.http import JsonResponse
 from django.contrib.auth.models import User
@@ -65,6 +65,7 @@ def render_network_tree(node):
 
 def establish_relationship(request):
     members = Member.objects.all()
+    relationships = MemberRelationship.objects.all()
     if request.method == 'POST':
         form = MemberRelationshipForm(request.POST)
         if form.is_valid():
@@ -76,7 +77,7 @@ def establish_relationship(request):
     else:
         form = MemberRelationshipForm()
     
-    return render(request, 'establish_relationship.html', {'form': form, 'members': members})
+    return render(request, 'establish_relationship.html', {'form': form, 'members': members, 'relationships': relationships})
 
 def relation_established(request, parent, child, member_id):
     member = Member.objects.get(id=member_id)
@@ -104,3 +105,20 @@ def user_updated(request, username):
     members=Member.objects.all()
     user = get_object_or_404(User, username=username)
     return render(request, 'user_updated.html', {'user': user, 'members': members})
+
+def edit_member_relationship(request, relationship_id):
+    relationship = get_object_or_404(MemberRelationship, id=relationship_id)
+    
+    if request.method == 'POST':
+        form = EditMemberRelationshipForm(request.POST, instance=relationship)
+        if form.is_valid():
+            form.save()
+            return redirect('relationship_updated', relationship_id=relationship.id)
+    else:
+        form = EditMemberRelationshipForm(instance=relationship)
+    
+    return render(request, 'edit_member_relationship.html', {'form': form, 'relationship': relationship})
+
+def relationship_updated(request, relationship_id):
+    relationship = get_object_or_404(MemberRelationship, id=relationship_id)
+    return render(request, 'relationship_updated.html', {'relationship': relationship})

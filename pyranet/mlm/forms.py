@@ -79,3 +79,14 @@ class MemberRelationshipForm(forms.ModelForm):
             else:
                 return None, None
             
+class EditMemberRelationshipForm(forms.ModelForm):
+    class Meta:
+        model = MemberRelationship
+        fields = ['parent', 'child']
+    
+    def __init__(self, *args, **kwargs):
+        super(EditMemberRelationshipForm, self).__init__(*args, **kwargs)
+        self.fields['parent'].queryset = Member.objects.all()
+        self.fields['child'].queryset = Member.objects.all()
+        self.fields['parent'].label_from_instance = lambda obj: f"{obj.user.username}"
+        self.fields['child'].label_from_instance = lambda obj: f"{obj.user.username}"
