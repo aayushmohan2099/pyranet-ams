@@ -1,25 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Homepage</title>
+    <title>Establish Member Relationship</title>
 </head>
 <body>
-    <h1>Welcome to PyraNet</h1>
-    <p>This is the homepage of PyraNet, a Multi-Level Marketing management system.</p>
+    <h1>Establish Member Relationship</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save">
+    </form>
+
+    <h2>Actions</h2>
     <ul>
-        <li><a href="{% url 'admin:index' %}">Go to Admin Panel</a></li>
-        <li><a href="{% url 'create_user' %}">Add a New Member</a></li>
-        <li><a href="{% url 'establish_relationship' %}">Establish Relationship Between Members</a></li>
+        <li><a href="{% url 'homepage' %}">Go to Homepage</a></li>
+        <li><a href="{% url 'create_user' %}">Add New Member</a></li>
     </ul>
 
-    <h2>Member List</h2>
-    <ul>
-        {% for member in members %}
-            <li><a href="{% url 'member_detail' member.id %}">{{ member.user.username }}</a></li>
-        {% endfor %}
-    </ul>
-
-    <h2>Find a Member</h2>
+    <h2>View Member Details</h2>
     <form action="{% url 'find_member' %}" method="get">
         <label for="member_id">Member ID:</label>
         <input type="text" id="member_id" name="member_id">
@@ -34,5 +32,6 @@
         </select>
         <input type="submit" value="Find">
     </form>
+
 </body>
 </html>

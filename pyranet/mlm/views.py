@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Member
-from .forms import UserCreationForm
+from .models import Member, MemberRelationship
+from .forms import UserCreationForm, MemberRelationshipForm
 import json
 from django.http import JsonResponse
 
@@ -61,3 +61,22 @@ def render_network_tree(node):
     
     html += '</li>'
     return html
+
+def establish_relationship(request):
+    members = Member.objects.all()
+    if request.method == 'POST':
+        form = MemberRelationshipForm(request.POST)
+        if form.is_valid():
+            form.save()
+            parent_id, child_id = form.get_selected_ids()
+            parent = Member.objects.get(id=parent_id)
+            child = Member.objects.get(id=child_id)
+            return redirect('relation_established', parent=parent.user.username, child=child.user.username, member_id=parent.id)
+    else:
+        form = MemberRelationshipForm()
+    
+    return render(request, 'establish_relationship.html', {'form': form, 'members': members})
+
+def relation_established(request, parent, child, member_id):
+    member = Member.objects.get(id=member_id)
+    return render(request, 'relation_established.html', {'parent': parent, 'child': child, 'member': member})

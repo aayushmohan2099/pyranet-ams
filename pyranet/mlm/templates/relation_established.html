@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relationship successfully Established !</title>
+</head>
+<body>
+    <h1>Thanks! {{ parent }},</h1>
+    <p>Your Relationship with {{ child }} has been successfully established!</p>
+    <div>
+        <a href="{% url 'member_detail' member.id %}">View Member</a>
+    </div>
+    <div>
+        <a href="{% url 'homepage' %}">Home</a>
+    </div>
+</body>
+</html>
