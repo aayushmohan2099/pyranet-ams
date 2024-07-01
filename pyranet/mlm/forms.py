@@ -23,6 +23,42 @@ class UserCreationForm(forms.ModelForm):
                 Member.objects.create(user=user, sponsor=sponsor)
         return user
 
+class UpdateUserForm(forms.ModelForm):
+    confirm_password = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+    sponsor = forms.ModelChoiceField(queryset=Member.objects.all(), required=False, label='Sponsor')
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+    def __init__(self, *args, **kwargs):
+        super(UpdateUserForm, self).__init__(*args, **kwargs)
+        self.fields['sponsor'].label_from_instance = lambda obj: obj.user.username
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
+
+        if password != confirm_password:
+            raise forms.ValidationError("Passwords do not match.")
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if self.cleaned_data['password']:
+            user.set_password(self.cleaned_data['password'])
+        if commit:
+            user.save()
+            sponsor = self.cleaned_data.get('sponsor')
+            if sponsor:
+                # Update existing Member object if it exists
+                member, created = Member.objects.get_or_create(user=user)
+                member.sponsor = sponsor
+                member.save()
+        return user
+
 class MemberRelationshipForm(forms.ModelForm):
     class Meta:
         model = MemberRelationship
@@ -42,3 +78,4 @@ class MemberRelationshipForm(forms.ModelForm):
                 return parent_id, child_id
             else:
                 return None, None
+            

@@ -149,6 +149,7 @@
         <li><a href="/admin/">Go to Admin Panel</a></li>
         <li><a href="{% url 'create_user' %}">Add Another Member</a></li>
         <li><a href="{% url 'establish_relationship' %}">Establish Relationship Between Members</a></li>
+        <li><a href="{% url 'update_user' username=member.user.username %}">Update Member-Details</a></li>
     </ul>
 
     <h2>View Another Member</h2>

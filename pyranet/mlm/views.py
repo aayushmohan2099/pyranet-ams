@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Member, MemberRelationship
-from .forms import UserCreationForm, MemberRelationshipForm
+from .forms import UserCreationForm, MemberRelationshipForm, UpdateUserForm
 import json
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 def homepage(request):
     members = Member.objects.all()
@@ -80,3 +81,26 @@ def establish_relationship(request):
 def relation_established(request, parent, child, member_id):
     member = Member.objects.get(id=member_id)
     return render(request, 'relation_established.html', {'parent': parent, 'child': child, 'member': member})
+
+def update_user(request, username):
+    user = get_object_or_404(User, username=username)
+    try:
+        member = Member.objects.get(user=user)
+    except Member.DoesNotExist:
+        member = None
+    
+    if request.method == 'POST':
+        form = UpdateUserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user_updated', username=user.username)
+    else:
+        form = UpdateUserForm(instance=user)
+        if member:
+            form.fields['sponsor'].initial = member.sponsor  # Set initial value if member exists
+    
+    return render(request, 'update_user.html', {'form': form, 'user': user})
+def user_updated(request, username):
+    members=Member.objects.all()
+    user = get_object_or_404(User, username=username)
+    return render(request, 'user_updated.html', {'user': user, 'members': members})

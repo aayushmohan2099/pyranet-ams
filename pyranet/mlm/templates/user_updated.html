@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Updated</title>
+</head>
+<body>
+    <h1>User Details Updated</h1>
+    <p>User {{ user.username }} details have been updated successfully!</p>
+    <a href="{% url 'homepage' %}">Go to Homepage</a>
+    <br><h2>Find a Member</h2>
+    <form action="{% url 'find_member' %}" method="get">
+        <label for="member_id">Member ID:</label>
+        <input type="text" id="member_id" name="member_id">
+        <input type="submit" value="Find">
+    </form>
+    <form action="{% url 'find_member' %}" method="get">
+        <label for="member_select">Select Member:</label>
+        <select id="member_select" name="member_id">
+            {% for member in members %}
+                <option value="{{ member.id }}">{{ member.user.username }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Find">
+    </form>
+</body>
+</html>

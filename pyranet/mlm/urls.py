@@ -9,4 +9,6 @@ urlpatterns = [
     path('find-member/', views.find_member, name='find_member'),
     path('relation-established/<str:parent>/<str:child>/<int:member_id>/', views.relation_established, name='relation_established'),
     path('establish-relationship/', views.establish_relationship, name='establish_relationship'),
+    path('update-user/<str:username>/', views.update_user, name='update_user'),
+    path('user-updated/<str:username>/', views.user_updated, name='user_updated'),
 ]
