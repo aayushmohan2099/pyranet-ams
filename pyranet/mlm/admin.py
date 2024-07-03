@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Member, MemberRelationship
+from .models import Member, MemberRelationship, Product, Company
 
 @admin.register(Member)
 class MemberAdmin(admin.ModelAdmin):
@@ -26,3 +26,11 @@ class MemberRelationshipAdmin(admin.ModelAdmin):
     get_child_name.short_description = 'Child'
 
     list_filter = ('parent',)
+
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = ('license_number', 'name', 'base_profit_per_member')
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price')
