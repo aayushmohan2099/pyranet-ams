@@ -5,7 +5,7 @@ class Company(models.Model):
     name = models.CharField(max_length=255)
     license_number = models.CharField(max_length=255)
     description = models.TextField()
-    logo = models.ImageField(upload_to='company_logos/')
+    logo = models.ImageField(upload_to='media/company_logos/')
     base_profit_per_member = models.DecimalField(max_digits=10, decimal_places=2)
     Products_offered = models.ManyToManyField('Product', related_name='offering_companies')
 
@@ -13,7 +13,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
-    image = models.ImageField(upload_to='Product_images/')
+    image = models.ImageField(upload_to='media/Product_images/')
 
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Products</title>
+</head>
+<body>
+    <h1>Manage Products</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add/Update Product</button>
+    </form>
+    <ul>
+        {% for Product in Products %}
+            <li>{{ Product.name }} - {{ Product.price }} - {{ Product.description }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'homepage' %}">Back to Homepage</a>
+</body>
+</html>

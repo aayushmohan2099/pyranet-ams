@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Member, MemberRelationship
-from .forms import UserCreationForm, MemberRelationshipForm, UpdateUserForm, EditMemberRelationshipForm
+from .models import Member, MemberRelationship, Company, Product
+from .forms import UserCreationForm, MemberRelationshipForm, UpdateUserForm, EditMemberRelationshipForm, CompanyForm, ProductForm
 import json
 from django.http import JsonResponse
 from django.contrib.auth.models import User
@@ -122,3 +122,35 @@ def edit_member_relationship(request, relationship_id):
 def relationship_updated(request, relationship_id):
     relationship = get_object_or_404(MemberRelationship, id=relationship_id)
     return render(request, 'relationship_updated.html', {'relationship': relationship})
+
+
+# View to show, update, or add new products under any company
+def manage_products(request):
+    Products = Product.objects.all()
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_products')
+    else:
+        form = ProductForm()
+    
+    return render(request, 'manage_products.html', {'Products': Products, 'form': form})
+
+# View to show, update, or add new companies and the products they offer
+def manage_companies(request):
+    companies = Company.objects.all()
+    if request.method == 'POST':
+        form = CompanyForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_companies')
+    else:
+        form = CompanyForm()
+    
+    return render(request, 'manage_companies.html', {'companies': companies, 'form': form})
+
+# View to browse the products of any company with their name, price, and description only
+def browse_products(request):
+    companies = Company.objects.all()
+    return render(request, 'browse_products.html', {'companies': companies})

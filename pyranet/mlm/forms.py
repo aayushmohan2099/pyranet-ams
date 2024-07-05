@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Member, MemberRelationship
+from .models import Member, MemberRelationship, Company, Product
 
 class UserCreationForm(forms.ModelForm):
     sponsor = forms.ModelChoiceField(queryset=Member.objects.all(), required=False, label='Sponsor')
@@ -90,3 +90,19 @@ class EditMemberRelationshipForm(forms.ModelForm):
         self.fields['child'].queryset = Member.objects.all()
         self.fields['parent'].label_from_instance = lambda obj: f"{obj.user.username}"
         self.fields['child'].label_from_instance = lambda obj: f"{obj.user.username}"
+
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ['name', 'license_number', 'description', 'logo', 'base_profit_per_member', 'Products_offered']
+
+    def __init__(self, *args, **kwargs):
+        super(CompanyForm, self).__init__(*args, **kwargs)
+        self.fields['Products_offered'].queryset = Product.objects.all()
+        self.fields['Products_offered'].label_from_instance = lambda obj: f"{obj.name}"
+
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'price', 'description', 'image']

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Browse Products</title>
+    <style>
+        .company-section {
+            margin-bottom: 30px;
+        }
+        .products-row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .product-item {
+            width: 200px; /* Adjust width as needed */
+            margin-right: 20px;
+            text-align: center;
+        }
+        .product-item img {
+            max-width: 100%;
+            height: auto;
+        }
+        .product-description {
+            display: none;
+        }
+        .show-description .product-description {
+            display: block;
+        }
+        .read-more, .read-less {
+            color: blue;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Browse Products</h1>
+    {% for company in companies %}
+        <div class="company-section">
+            <h2>{{ company.name }}</h2>
+            <div class="products-row">
+                {% for product in company.Products_offered.all %}
+                    <div class="product-item">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        <h3>{{ product.name }}</h3>
+                        <p class="product-excerpt">{{ product.description|truncatewords:20 }}</p>
+                        <div class="product-description">{{ product.description }}</div>
+                        <span class="read-more">Read more</span>
+                        <span class="read-less" style="display:none;">Read less</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+    <a href="{% url 'homepage' %}">Back to Homepage</a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const readMoreButtons = document.querySelectorAll('.read-more');
+            const readLessButtons = document.querySelectorAll('.read-less');
+
+            readMoreButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productItem = this.parentElement;
+                    productItem.classList.add('show-description');
+                    this.style.display = 'none';
+                    productItem.querySelector('.read-less').style.display = 'inline';
+                });
+            });
+
+            readLessButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productItem = this.parentElement;
+                    productItem.classList.remove('show-description');
+                    this.style.display = 'none';
+                    productItem.querySelector('.read-more').style.display = 'inline';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
