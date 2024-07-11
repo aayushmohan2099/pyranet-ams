@@ -18,6 +18,8 @@ urlpatterns = [
     path('manage-products/', views.manage_products, name='manage_products'),
     path('manage-companies/', views.manage_companies, name='manage_companies'),
     path('browse-products/', views.browse_products, name='browse_products'),
+    path('user-login/', views.user_login, name='user_login'),
+    path('user-dashboard/', views.user_dashboard, name='user_dashboard'),
 ]
 
 if settings.DEBUG:

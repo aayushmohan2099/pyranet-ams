@@ -2,8 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Member, MemberRelationship, Company, Product
 from .forms import UserCreationForm, MemberRelationshipForm, UpdateUserForm, EditMemberRelationshipForm, CompanyForm, ProductForm
 import json
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.urls import reverse
 
 def homepage(request):
     members = Member.objects.all()
@@ -154,3 +157,29 @@ def manage_companies(request):
 def browse_products(request):
     companies = Company.objects.all()
     return render(request, 'browse_products.html', {'companies': companies})
+
+def user_login(request):
+    if request.method == 'POST':
+        email_or_username = request.POST['email_or_username']
+        password = request.POST['password']
+
+        user = authenticate(request, username=email_or_username, password=password)
+        
+        if user is None:
+            # Try to authenticate using email
+            try:
+                user_obj = User.objects.get(email=email_or_username)
+                user = authenticate(request, username=user_obj.username, password=password)
+            except User.DoesNotExist:
+                pass
+
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse('user_dashboard'))
+        else:
+            messages.error(request, 'Invalid login credentials')
+
+    return render(request, 'user_login.html')
+
+def user_dashboard(request):
+    return render(request, 'dashboard.html')

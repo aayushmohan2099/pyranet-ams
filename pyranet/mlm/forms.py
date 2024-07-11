@@ -3,11 +3,11 @@ from django.contrib.auth.models import User
 from .models import Member, MemberRelationship, Company, Product
 
 class UserCreationForm(forms.ModelForm):
-    sponsor = forms.ModelChoiceField(queryset=Member.objects.all(), required=False, label='Sponsor')
+    sponsor = forms.ModelChoiceField(queryset=Member.objects.all(), required=True)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ('username', 'email', 'password')
 
     def __init__(self, *args, **kwargs):
         super(UserCreationForm, self).__init__(*args, **kwargs)
@@ -18,10 +18,29 @@ class UserCreationForm(forms.ModelForm):
         user.set_password(self.cleaned_data['password'])
         if commit:
             user.save()
-            sponsor = self.cleaned_data.get('sponsor')
-            if sponsor:
-                Member.objects.create(user=user, sponsor=sponsor)
+            Member.objects.create(user=user, sponsor=self.cleaned_data['sponsor'])
         return user
+
+# Old form
+    # sponsor = forms.ModelChoiceField(queryset=Member.objects.all(), required=False, label='Sponsor')
+
+    # class Meta:
+    #     model = User
+    #     fields = ['username', 'email', 'password']
+
+    # def __init__(self, *args, **kwargs):
+    #     super(UserCreationForm, self).__init__(*args, **kwargs)
+    #     self.fields['sponsor'].label_from_instance = lambda obj: obj.user.username
+
+    # def save(self, commit=True):
+    #     user = super().save(commit=False)
+    #     user.set_password(self.cleaned_data['password'])
+    #     if commit:
+    #         user.save()
+    #         sponsor = self.cleaned_data.get('sponsor')
+    #         if sponsor:
+    #             Member.objects.create(user=user, sponsor=sponsor)
+    #     return user
 
 class UpdateUserForm(forms.ModelForm):
     confirm_password = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
@@ -106,3 +125,7 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ['name', 'price', 'description', 'image']
+
+class LoginForm(forms.Form):
+    email_or_username = forms.CharField(max_length=254, required=True, widget=forms.TextInput(attrs={'placeholder': 'Email or Username'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
