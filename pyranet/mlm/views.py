@@ -171,15 +171,42 @@ def user_login(request):
                 user_obj = User.objects.get(email=email_or_username)
                 user = authenticate(request, username=user_obj.username, password=password)
             except User.DoesNotExist:
-                pass
+                messages.error(request, 'User does not exist')
 
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse('user_dashboard'))
+            try:
+                member = Member.objects.get(user=user)
+                request.session['member_id'] = member.id  # Store member ID in session
+            except Member.DoesNotExist:
+                messages.error(request, 'Member associated with user does not exist')
+                return redirect('user_login')  # Redirect back to login if no member is found
+            
+            return redirect('user_dashboard', member.id)
         else:
             messages.error(request, 'Invalid login credentials')
 
     return render(request, 'user_login.html')
 
-def user_dashboard(request):
-    return render(request, 'dashboard.html')
+def user_dashboard(request, member_id):
+    members = Member.objects.all()
+    member_id = request.session.get('member_id')
+    if member_id:
+        member = get_object_or_404(Member, id=member_id)
+    else:
+        member = None
+    def get_network_tree(member):
+        # Recursive function to build the tree structure
+        children = []
+        for child_relationship in member.children.all():
+            children.append(get_network_tree(child_relationship.child))
+        
+        return {
+            'name': member.user.username,
+            'children': children
+        }
+
+    network_data = get_network_tree(member)
+    network_tree_html = render_network_tree(network_data)
+
+    return render(request, 'dashboard.html', {'member': member, 'members': members, 'network_tree': network_tree_html})

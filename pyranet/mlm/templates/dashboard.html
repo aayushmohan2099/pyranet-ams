@@ -727,8 +727,8 @@
         <aside>
             <div class="toggle">
                 <div class="logo">
-                    <img src="images/logo.png">
-                    <h2>Asmr<span class="danger">Prog</span></h2>
+                    <img src="{% static 'logo.png' %}">
+                    <h2>Pyra<span class="danger">Net</span></h2>
                 </div>
                 <div class="close" id="close-btn">
                     <span class="material-icons-sharp">
@@ -787,13 +787,13 @@
                     </span>
                     <h3>Settings</h3>
                 </a>
-                <a href="#">
+                <a href="{% url 'user_login' %}">
                     <span class="material-icons-sharp">
                         add
                     </span>
                     <h3>New Login</h3>
                 </a>
-                <a href="#">
+                <a href="{% url 'homepage' %}">
                     <span class="material-icons-sharp">
                         logout
                     </span>
@@ -812,7 +812,7 @@
                     <div class="status">
                         <div class="info">
                             <h3>Total Sales</h3>
-                            <h1>$65,024</h1>
+                            <h1>65,024 ₹</h1>
                         </div>
                         <div class="progresss">
                             <svg>
@@ -827,15 +827,15 @@
                 <div class="visits">
                     <div class="status">
                         <div class="info">
-                            <h3>Site Visit</h3>
-                            <h1>24,981</h1>
+                            <h3>Profit from Chain</h3>
+                            <h1>24,981 ₹</h1>
                         </div>
                         <div class="progresss">
                             <svg>
                                 <circle cx="38" cy="38" r="36"></circle>
                             </svg>
                             <div class="percentage">
-                                <p>-48%</p>
+                                <p>+48%</p>
                             </div>
                         </div>
                     </div>
@@ -843,8 +843,8 @@
                 <div class="searches">
                     <div class="status">
                         <div class="info">
-                            <h3>Searches</h3>
-                            <h1>14,147</h1>
+                            <h3>Individual Profit</h3>
+                            <h1>14,147 ₹</h1>
                         </div>
                         <div class="progresss">
                             <svg>
@@ -864,24 +864,24 @@
                 <h2>New Users</h2>
                 <div class="user-list">
                     <div class="user">
-                        <img src="images/profile-2.jpg">
-                        <h2>Jack</h2>
+                        <img src="{% static 'vikas_dp.jpg' %}">
+                        <h2>Vikas</h2>
                         <p>54 Min Ago</p>
                     </div>
                     <div class="user">
-                        <img src="images/profile-3.jpg">
-                        <h2>Amir</h2>
+                        <img src="{% static 'akash_dp.jpg' %}">
+                        <h2>Akash</h2>
                         <p>3 Hours Ago</p>
                     </div>
                     <div class="user">
-                        <img src="images/profile-4.jpg">
-                        <h2>Ember</h2>
+                        <img src="{% static 'amrita_dp.jpg' %}">
+                        <h2>Amrita</h2>
                         <p>6 Hours Ago</p>
                     </div>
                     <div class="user">
-                        <img src="images/plus.png">
+                        <img src="{% static 'user_logo.webp' %}">
                         <h2>More</h2>
-                        <p>New User</p>
+                        <p>Browse Users</p>
                     </div>
                 </div>
             </div>
@@ -928,11 +928,11 @@
 
                 <div class="profile">
                     <div class="info">
-                        <p>Hey, <b>Reza</b></p>
+                        <p>Hey, <b>{{ member.user.username }}</b></p>
                         <small class="text-muted">Admin</small>
                     </div>
                     <div class="profile-photo">
-                        <img src="images/profile-1.jpg">
+                        <img src="{% static 'user_logo.webp' %}">
                     </div>
                 </div>
 
@@ -941,9 +941,9 @@
 
             <div class="user-profile">
                 <div class="logo">
-                    <img src="images/logo.png">
-                    <h2>AsmrProg</h2>
-                    <p>Fullstack Web Developer</p>
+                    <img src="{% static 'logo.png' %}">
+                    <h2>PyraNet</h2>
+                    <p>Maximizing Your MLM Potential</p>
                 </div>
             </div>
 
@@ -963,7 +963,7 @@
                     </div>
                     <div class="content">
                         <div class="info">
-                            <h3>Workshop</h3>
+                            <h3>Meet with Vivek</h3>
                             <small class="text_muted">
                                 08:00 AM - 12:00 PM
                             </small>
@@ -982,9 +982,9 @@
                     </div>
                     <div class="content">
                         <div class="info">
-                            <h3>Workshop</h3>
+                            <h3>Chain Meetup</h3>
                             <small class="text_muted">
-                                08:00 AM - 12:00 PM
+                                08:00 PM - 10:00 PM
                             </small>
                         </div>
                         <span class="material-icons-sharp">
@@ -1012,19 +1012,19 @@
     <script type = "text/javascript">
         const Orders = [
             {
-                productName: 'JavaScript Tutorial',
+                productName: 'Essentials by ARTISTRY™ Light Lotion',
                 productNumber: '85743',
                 paymentStatus: 'Due',
                 status: 'Pending'
             },
             {
-                productName: 'CSS Full Course',
+                productName: 'Kids Calcium Magnesium Cocoa',
                 productNumber: '97245',
                 paymentStatus: 'Refunded',
                 status: 'Declined'
             },
             {
-                productName: 'Flex-Box Tutorial',
+                productName: 'Wild Green Eau de Toilette',
                 productNumber: '36452',
                 paymentStatus: 'Paid',
                 status: 'Active'
